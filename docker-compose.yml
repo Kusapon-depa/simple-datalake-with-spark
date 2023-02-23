@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  notebook:
+    image: jupyter/all-spark-notebook:latest
+    ports:
+      - 8888:8888
+      - 4040:4040
+    environment:
+      - PYSPARK_SUBMIT_ARGS=--packages com.amazonaws:aws-java-sdk-bundle:1.11.819,org.apache.hadoop:hadoop-aws:3.2.4 pyspark-shell
+    volumes:
+      - ./.jupyter/work:/home/jovyan/work
+
+  minio:
+    image: "minio/minio:latest"
+    volumes:
+      - ./.storage/minio:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      MINIO_ACCESS_KEY: "root"
+      MINIO_SECRET_KEY: "root12345"
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
