@@ -9,7 +9,7 @@
 
 To start Workbench
 ```
-    docker-compose up -d
+docker-compose up -d
 ```
 
 Open jupyter and see example file (spark-example.ipynb)
@@ -21,7 +21,6 @@ Open jupyter and see example file (spark-example.ipynb)
 
 ## stop workbench and terminate
 
-To start Workbench
 ```
-    docker-compose down
+docker-compose down
 ```
