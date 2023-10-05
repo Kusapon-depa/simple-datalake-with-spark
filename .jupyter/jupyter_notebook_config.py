@@ -466,7 +466,7 @@ c = get_config()  #noqa
 #                        The string should be of the form type:salt:hashed-
 #  password.
 #  Default: ''
-# c.NotebookApp.password = ''
+c.NotebookApp.password = ''
 
 ## Forces users to use a password for the Notebook server.
 #                        This is useful in a multi user environment, for instance when
@@ -575,7 +575,7 @@ c = get_config()  #noqa
 #          Setting to an empty string disables authentication altogether, which
 #  is NOT RECOMMENDED.
 #  Default: '<generated>'
-# c.NotebookApp.token = '<generated>'
+c.NotebookApp.token = ''
 
 ## Supply overrides for the tornado.web.Application that the Jupyter notebook
 #  uses.

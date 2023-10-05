@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  spark:
+  spark-master:
     image: docker.io/bitnami/spark:3.3.2
     environment:
       - SPARK_MODE=master
@@ -10,14 +10,12 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
     ports:
-      - '8080:8080'
-    volumes:
-      - ".:/test-files:rw"
+      - 8080:8080
   spark-worker:
     image: docker.io/bitnami/spark:3.3.2
     environment:
       - SPARK_MODE=worker
-      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_MASTER_URL=spark://spark-master:7077
       - SPARK_WORKER_MEMORY=1G
       - SPARK_WORKER_CORES=1
       - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -30,13 +28,15 @@ services:
       - 8888:8888
       - 4040:4040
     environment:
-      - PYSPARK_SUBMIT_ARGS=--packages com.amazonaws:aws-java-sdk-bundle:1.12.560,org.apache.hadoop:hadoop-aws:3.3.2 pyspark-shell
+       - PYSPARK_SUBMIT_ARGS=--packages com.amazonaws:aws-java-sdk-bundle:1.12.560,org.apache.hadoop:hadoop-aws:3.3.2 pyspark-shell
+       - GRANT_SUDO=true
     depends_on:
-      - spark
+      - spark-master
       - spark-worker
     volumes:
       - ./work:/home/jovyan/work
       - ./.jupyter:/home/jovyan/.jupyter
+      #- ./jars:/home/jovyan/jars
 
   minio:
     image: "minio/minio:latest"
